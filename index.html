@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeevan Vidya: An Interactive Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .tab-content {
+            display: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+        }
+        .tab.active {
+            background-color: #4f46e5; /* indigo-600 */
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .tab.active:hover {
+             background-color: #4338ca; /* indigo-700 */
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            border-bottom: 2px dotted #9ca3af; /* gray-400 */
+        }
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #1f2937; /* gray-800 */
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <!-- Header and Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-indigo-600">Jeevan Vidya</h1>
+            <nav class="hidden md:flex space-x-6 items-center">
+                <a href="#introduction" class="text-slate-600 hover:text-indigo-600 transition">Introduction</a>
+                <a href="#course-content" class="text-slate-600 hover:text-indigo-600 transition">Course Content</a>
+                <a href="#key-concepts" class="text-slate-600 hover:text-indigo-600 transition">Key Concepts</a>
+                <a href="#vision" class="text-slate-600 hover:text-indigo-600 transition">Vision</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-slate-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#introduction" class="block py-2 text-slate-600 hover:text-indigo-600">Introduction</a>
+            <a href="#course-content" class="block py-2 text-slate-600 hover:text-indigo-600">Course Content</a>
+            <a href="#key-concepts" class="block py-2 text-slate-600 hover:text-indigo-600">Key Concepts</a>
+            <a href="#vision" class="block py-2 text-slate-600 hover:text-indigo-600">Vision</a>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="w-full bg-slate-200 h-2 sticky top-[72px] z-40">
+        <div id="progressBar" class="bg-indigo-600 h-2" style="width: 0%; transition: width 0.5s ease-in-out;"></div>
+    </div>
+    
+    <main class="container mx-auto p-6">
+
+        <!-- Introduction Section -->
+        <section id="introduction" class="text-center my-12 md:my-20">
+            <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">A Path to Human Consciousness & Harmony</h2>
+            <p class="max-w-3xl mx-auto text-lg text-slate-600">
+                This 7-day introductory camp guides you through a profound shift in understanding, moving from common societal perceptions to a comprehensive, existence-based view of human life and purpose.
+            </p>
+        </section>
+
+        <!-- Course Content Tabs -->
+        <section id="course-content" class="my-12 md:my-20">
+            <h3 class="text-3xl font-bold text-center text-slate-800 mb-2">Daily Exploration</h3>
+            <p class="text-center text-slate-500 mb-8">Select a day to explore its core concepts.</p>
+            <div class="bg-white p-4 sm:p-6 rounded-lg shadow-xl">
+                <!-- Tabs -->
+                <div class="bg-slate-100 p-2 rounded-lg flex flex-col sm:flex-row gap-2 mb-6">
+                    <div id="tabs-container" class="flex flex-wrap sm:flex-nowrap gap-2 w-full">
+                        <!-- Tabs will be dynamically generated here -->
+                    </div>
+                </div>
+
+                <!-- Tab Panels -->
+                <div id="tab-panels-container">
+                    <!-- Tab content will be dynamically generated here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Concepts Comparison -->
+        <section id="key-concepts" class="my-12 md:my-20">
+            <h3 class="text-3xl font-bold text-center text-slate-800 mb-8">Conceptual Clarity</h3>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Comparison Table 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                    <h4 class="text-xl font-bold text-indigo-700 mb-4">Consciousness: Animal vs. Human</h4>
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="p-2 font-semibold">Aspect</th>
+                                <th class="p-2 font-semibold bg-red-50 rounded-t-lg">Animal Consciousness (जीव चेतना)</th>
+                                <th class="p-2 font-semibold bg-green-50 rounded-t-lg">Human Consciousness (मानव चेतना)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-2 font-medium">Primary Driver</td>
+                                <td class="p-2 bg-red-50">Survival, Insecurity</td>
+                                <td class="p-2 bg-green-50">Purpose, Completeness</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-medium">Source of Happiness</td>
+                                <td class="p-2 bg-red-50">Temporary Sensory Pleasure</td>
+                                <td class="p-2 bg-green-50">Understanding, Harmony</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-medium">Basis of Identity</td>
+                                <td class="p-2 bg-red-50 rounded-b-lg">Appearance, Wealth, Status</td>
+                                <td class="p-2 bg-green-50 rounded-b-lg">Self-Worth, Knowledge</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Comparison Table 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                    <h4 class="text-xl font-bold text-indigo-700 mb-4">Living: Survival vs. Purpose</h4>
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="p-2 font-semibold">Aspect</th>
+                                <th class="p-2 font-semibold bg-orange-50 rounded-t-lg">"Living to Survive" (जिंदा रहना)</th>
+                                <th class="p-2 font-semibold bg-sky-50 rounded-t-lg">"Purposeful Life" (जीना)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-2 font-medium">Focus</td>
+                                <td class="p-2 bg-orange-50">Physical Amenities</td>
+                                <td class="p-2 bg-sky-50">Knowledge, Happiness</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-medium">Outcome</td>
+                                <td class="p-2 bg-orange-50">Dissatisfaction, Comparison</td>
+                                <td class="p-2 bg-sky-50">Satisfaction, Peace</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-medium">Goal</td>
+                                <td class="p-2 bg-orange-50 rounded-b-lg">Material Accumulation</td>
+                                <td class="p-2 bg-sky-50 rounded-b-lg">Fulfillment, Contribution</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vision Section -->
+        <section id="vision" class="my-12 md:my-20 bg-indigo-600 text-white rounded-lg p-8 md:p-12 text-center shadow-2xl">
+            <h3 class="text-3xl font-bold mb-4">Vision for a Transformed Society</h3>
+            <p class="max-w-3xl mx-auto text-lg text-indigo-100 mb-6">
+                The ultimate goal is a society built on understanding and harmony, leading to...
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="bg-indigo-700 p-6 rounded-lg">
+                    <h4 class="font-bold text-xl mb-2">Complaint-Free Family</h4>
+                    <p class="text-indigo-200">Prosperous and trusting relationships.</p>
+                </div>
+                <div class="bg-indigo-700 p-6 rounded-lg">
+                    <h4 class="font-bold text-xl mb-2">Fear-Free Society</h4>
+                    <p class="text-indigo-200">Based on mutual understanding and justice.</p>
+                </div>
+                <div class="bg-indigo-700 p-6 rounded-lg">
+                    <h4 class="font-bold text-xl mb-2">Balanced Natural Order</h4>
+                    <p class="text-indigo-200">Living in coexistence with nature.</p>
+                </div>
+            </div>
+            <p class="mt-8 font-semibold text-xl">One Earth, One Nation through Human Education.</p>
+        </section>
+
+    </main>
+    
+    <!-- Modal -->
+    <div id="modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 opacity-0 invisible">
+        <div id="modal-content" class="modal-content bg-white rounded-lg shadow-2xl p-8 max-w-2xl w-full transform scale-95">
+            <div class="flex justify-between items-center mb-4">
+                <h2 id="modal-title" class="text-2xl font-bold text-indigo-700">Modal Title</h2>
+                <button id="modal-close-button" class="text-slate-500 hover:text-slate-800">&times;</button>
+            </div>
+            <div id="modal-body" class="text-slate-600 space-y-4">
+                <p>Modal content goes here.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Data for the tabs
+            const courseData = [
+                {
+                    day: 1,
+                    title: 'Identifying the Problem',
+                    layout: 'cards',
+                    content: [
+                        { 
+                            title: 'Current Societal Crisis', 
+                            text: 'We see symptoms of a deep-rooted issue everywhere: families are breaking apart, crime rates are rising, and our environment is degrading. These are not isolated incidents but interconnected consequences of a fundamental flaw in our collective human understanding. We are treating the symptoms without addressing the underlying disease.',
+                            type: 'card'
+                        },
+                        { 
+                            title: 'The Rise of a "Family-Less Society"', 
+                            text: 'Relationships are becoming increasingly transactional. For example, parents might be seen merely as "ATM machines" for their children. This shift away from bonds built on trust and mutual respect towards utility-based interactions is leading to the breakdown of the family, the core unit of society.',
+                            type: 'card'
+                        },
+                        {
+                            title: 'Short-Term Thinking vs. Long-Term Vision',
+                            type: 'table',
+                            headers: ['Aspect', 'Short-Term Thinking', 'Long-Term Vision'],
+                            rows: [
+                                ['Timeframe', '5-year cycles', '50-100 year spans'],
+                                ['Focus', 'Immediate results, political gains', 'Holistic, sustainable solutions'],
+                                ['Approach', 'Reactive problem-fixing', 'Proactive, root-cause analysis'],
+                                ['Outcome', 'Temporary fixes, recurring issues', 'Lasting harmony and prosperity']
+                            ]
+                        },
+                        {
+                            title: "'Living to Survive' vs. 'Purposeful Life'",
+                            type: 'table',
+                            headers: ['Aspect', 'Living to Survive (जिंदा रहना)', 'A Purposeful Life (जीना)'],
+                            rows: [
+                                ['Primary Goal', 'Accumulating physical amenities', 'Achieving continuous happiness & peace'],
+                                ['Motivation', 'Insecurity and fear', "Desire for knowledge & fulfillment"],
+                                ['Needs Fulfilled', 'Body-level (temporary)', "Self-level ('मैं') (continuous)"],
+                                ['Result', 'Endless comparison and dissatisfaction', 'Inner satisfaction and harmony']
+                            ]
+                        },
+                        { 
+                            title: 'Misunderstanding Human Design', 
+                            text: "The core problem isn't a lack of resources, technology, or intelligence. It's a fundamental failure to understand our own human design. We act without knowing our true purpose, our inherent needs (beyond the physical), and our relationship with the larger existence. This leads to flawed solutions and perpetual conflict.",
+                            type: 'card'
+                        },
+                        { 
+                            title: 'Beyond Sensory Gratification', 
+                            text: "We often chase happiness through sensory pleasures—good food, entertainment, luxury. While these provide temporary enjoyment for the body, they cannot fulfill the deeper needs of the 'self' (मैं). The self seeks continuous happiness, which can only be found through knowledge, right understanding, and harmonious relationships.",
+                            type: 'card'
+                        }
+                    ]
+                },
+                {
+                    day: 2,
+                    title: 'Understanding \'I\' (Self)',
+                    layout: 'cards',
+                    content: [
+                        {
+                            title: "The Nature of 'I' (मैं) vs. The Body",
+                            text: "The most fundamental realization is that 'I' (the self, the consciousness) am distinct from my body. The body is a physical instrument, a tool that I use. 'I' am the one who sees, understands, feels, and decides. The needs of the 'I' (respect, trust, happiness) are different from the needs of the body (food, shelter). Confusing the two is a primary source of conflict.",
+                            type: 'card'
+                        },
+                        {
+                            title: "The Trap of Material Identity",
+                            text: "When we lack self-understanding, we build our identity on external, temporary things: appearance (रूप), physical strength (बल), wealth (धन), and position/status (पद). This inevitably leads to a life of comparison, jealousy, and conflict, as these things are relative and never permanently satisfying. True identity is rooted in the unchanging nature of the self.",
+                            type: 'card'
+                        },
+                        {
+                            title: 'Willfulness vs. True Freedom',
+                            type: 'table',
+                            headers: ['Aspect', 'Willfulness (मनमानी)', 'True Freedom (स्वतंत्रता)'],
+                            rows: [
+                                ['Basis', 'Acting on whims, desires', 'Acting based on right understanding'],
+                                ['Nature', 'Enslavement to senses, beliefs', 'Self-regulation, self-control (स्वनियंत्रण)'],
+                                ['Dependence', 'Dependent on external validation', 'Self-sufficient, internally driven'],
+                                ['Outcome', 'Contradiction, conflict, unhappiness', 'Harmony, resolution, continuous happiness']
+                            ]
+                        },
+                        {
+                            title: 'Motivation: Insecurity vs. Completeness',
+                            type: 'table',
+                            headers: ['Level', 'Driving Force', 'Goal', 'Result'],
+                            rows: [
+                                ['Body', 'Insecurity (असुरक्षा)', 'Survival, sensory pleasure', 'Temporary relief, more craving'],
+                                ["'I' (Self)", 'Desire for Completeness (पूर्णता)', 'Understanding, harmony, love', 'Lasting fulfillment, peace']
+                            ]
+                        },
+                    ]
+                },
+                {
+                    day: 3,
+                    title: 'Happiness Through Acceptance',
+                    layout: 'cards',
+                    content: [
+                         {
+                            title: "Happiness is Acceptance of Reality",
+                            text: "Happiness is not an external thing to be acquired; it is an internal state of being. This state is achieved through acceptance (स्वीकृति) of reality as it is. Conversely, suffering (दुख) is simply a state of non-acceptance (अस्वीकृति). When our understanding aligns with reality, we are in a state of harmony and happiness.",
+                            type: 'card'
+                        },
+                        {
+                            title: "The Illusion of Suffering",
+                            text: "Suffering is not a fundamental part of existence, just as darkness is not a 'thing' in itself. Darkness is merely the absence of light. Similarly, suffering is the absence of right understanding (समझ का ना होना). When understanding dawns, suffering disappears. Problems are not inherent in events, but in our perception of them.",
+                            type: 'card'
+                        },
+                        {
+                            title: 'Human-Made Systems vs. Nature\'s Order',
+                            type: 'table',
+                            headers: ['Aspect', 'Human-Made Systems (शासन)', "Nature's Inherent Order (व्यवस्था)"],
+                            rows: [
+                                ['Core Principle', 'Control over others (पर नियंत्रण)', 'Self-regulation (स्वनियंत्रण)'],
+                                ['Basis', 'Fear, greed, or blind belief', 'Inherent harmony and interconnection'],
+                                ['Structure', 'Designed for the benefit of a few', 'Holistic, benefits all units'],
+                                ['Outcome', 'Conflict, exploitation, disorder', 'Balance, mutual fulfillment, order']
+                            ]
+                        },
+                        {
+                            title: "Understanding is the Solution",
+                            text: "Family conflicts, societal problems, and internal turmoil all stem from a single root: a lack of understanding. We try to solve these issues with more resources or better controls, but the real solution lies in understanding the inherent order (Vyavastha) in existence. When we understand this order, we have the solution to every problem, and happiness becomes a natural outcome.",
+                            type: 'card'
+                        },
+                    ]
+                },
+                {
+                    day: 4,
+                    title: 'The Path to Human Consciousness',
+                    layout: 'cards',
+                    content: [
+                        {
+                            title: "Answering Life's Core Questions",
+                            text: "The journey begins by seriously asking two fundamental questions: 'Why live?' (क्यों जीना है) and 'How to live?' (कैसे जीना है). The assumed answer is often 'to accumulate wealth and enjoy pleasures'. The proposed answer is 'to live in a state of continuous happiness and prosperity through right understanding and harmonious relationships'.",
+                            type: 'card'
+                        },
+                        {
+                            title: "The Myth of Scarcity",
+                            text: "We live under the assumption of scarcity, believing there isn't enough for everyone. However, human physical needs are limited and quantifiable. Nature, coupled with human ingenuity, has the capacity for abundant production. The problem of poverty is not one of scarcity, but of mismanagement and a flawed understanding of wealth and distribution.",
+                            type: 'card'
+                        },
+                        {
+                            title: 'Social Property vs. Personal Property',
+                            type: 'table',
+                            headers: ['Property Type', 'Examples', 'Purpose & Responsibility'],
+                            rows: [
+                                ['Personal', 'Appearance, Strength, Intellect', 'These are for my self-development and to fulfill my role in the larger order.'],
+                                ['Social (सामाजिक संपत्ति)', 'Children, Wealth, Reputation', "These are entrusted to me by society and should be utilized for society's well-being and enrichment."]
+                            ]
+                        },
+                        {
+                            title: "Education's True Objective",
+                            text: "Modern education primarily provides skills for survival (how to make a living). Its true and complete purpose should be a total transformation of consciousness—from 'animal consciousness' (living for survival and pleasure) to 'human consciousness' (living with understanding, purpose, and in harmony). This is the key to solving all human problems.",
+                            type: 'card'
+                        },
+                    ]
+                },
+                {
+                    day: 5,
+                    title: 'The Journey of Transformation',
+                    layout: 'cards',
+                    content: [
+                        {
+                            title: "The Self's Infinite Hunger for Knowledge",
+                            text: "Physical hunger for food is temporary; once you eat, it is satiated. However, the 'hunger' of the self (मैं की भूख) for knowledge and understanding is infinite. The more you understand, the more you realize there is to understand. This is a journey of continuous growth and fulfillment that never ends.",
+                            type: 'card'
+                        },
+                        {
+                            title: "The Importance of Early 'Sanskar'",
+                            text: "The values, beliefs, and imprints (संस्कार) we receive in early childhood are profoundly important. They form the foundation of our perception and conduct throughout life. A transformative education, therefore, must begin at a young age to instill a worldview based on reality and harmony, rather than on conflicting assumptions.",
+                            type: 'card'
+                        },
+                        {
+                            title: 'The Process of True Knowing',
+                            type: 'table',
+                            headers: ['Step', 'Sanskrit Term', 'Meaning & Action'],
+                            rows: [
+                                ['1. Listening', 'Shravan (श्रवण)', 'Attentively and openly listening to a proposal or new information without immediate judgment.'],
+                                ['2. Contemplation', 'Manan (मनन)', 'Deeply reflecting on the proposal, verifying it against your own experience and natural acceptance.'],
+                                ['3. Practice', 'Nidhidhyasan (निधिध्यासन)', 'Living according to the understanding, consistently and patiently. This leads to internal clarity.'],
+                                ['4. Realization', 'Anubhav (अनुभव)', 'Direct, experiential realization of the reality. The understanding becomes a permanent part of your being.']
+                            ]
+                        },
+                        {
+                            title: 'Dimensions of Human Gratification (Aaswadan)',
+                            type: 'table',
+                            headers: ['Level', 'Sanskrit Term', 'Source of Happiness', 'Nature'],
+                            rows: [
+                                ['Sensory', 'Ruchi Mulak (रुचि मूलक)', 'Taste, sight, sound, etc.', 'Temporary, dependent on external objects'],
+                                ['Value-based', 'Mulya Mulak (मूल्य मूलक)', 'Feelings like trust, respect in relationships', 'More lasting, internal feeling'],
+                                ['Purpose-based', 'Lakshya Mulak (लक्ष्य मूलक)', 'Understanding and living in harmony with existence', 'Continuous, self-driven, fulfilling']
+                            ]
+                        },
+                    ]
+                },
+                {
+                    day: 6,
+                    title: 'Realizing Harmony',
+                    layout: 'cards',
+                    content: [
+                        {
+                            title: "Existence as Coexistence (सह-अस्तित्व)",
+                            text: "The ultimate reality of the universe is simple: it is coexistence. It is comprised of energy-filled units (matter, consciousness) existing and submerged in all-pervading space (शून्य). Everything is interconnected and in perfect harmony. Humans, due to lack of understanding, are the only unit that creates disorder.",
+                            type: 'card'
+                        },
+                        {
+                            title: "The Power of Giving",
+                            text: "In a world driven by accumulation, the real source of joy is giving. When you give material things, you may deplete your stock. But when you give knowledge and understanding, it multiplies within you. The act of sharing and contributing to the well-being of others is inherently fulfilling and a virtuous cycle.",
+                            type: 'card'
+                        },
+                        {
+                            title: "Redefining Core Human Values",
+                            text: "<ul class='list-disc list-inside space-y-2'><li><strong>Truth (Satya):</strong> To see and understand reality exactly as it is (जो जैसा है उसे वैसा ही जानना), not through the filter of our assumptions or beliefs.</li><li><strong>Righteousness (Dharma):</strong> To live in harmony within oneself and with the inherent order of existence. It is the human aspiration for continuous happiness.</li><li><strong>Justice (Nyaya):</strong> To ensure mutual fulfillment in all relationships—with other humans and with nature. It is based on purposeful complementarity (उपयोगिता पूरकता).</li></ul>",
+                            type: 'card'
+                        },
+                        {
+                            title: "Sociality is the True Spiritual Practice",
+                            text: "Enlightenment is not found in isolation. The true practice (साधना) is active engagement in society with the aim of contributing to a transformation towards a harmonious, fear-free, and prosperous world. Our own self-realization is perfected through our contribution to the collective well-being.",
+                            type: 'card'
+                        },
+                    ]
+                }
+            ];
+
+            const tabsContainer = document.getElementById('tabs-container');
+            const tabPanelsContainer = document.getElementById('tab-panels-container');
+
+            courseData.forEach((dayData, index) => {
+                // Create Tab Button
+                const tabButton = document.createElement('button');
+                tabButton.className = `tab flex-grow sm:flex-grow-0 basis-1/3 sm:basis-auto text-sm sm:text-base font-medium text-center text-slate-600 rounded-md py-2.5 px-4 transition-all duration-300 ease-in-out hover:bg-indigo-100 hover:text-indigo-600 ${index === 0 ? 'active' : 'bg-transparent'}`;
+                tabButton.innerHTML = `<span class="hidden sm:inline">Day ${dayData.day}: </span>${dayData.title}`;
+                tabButton.setAttribute('data-tab', `day${dayData.day}`);
+                tabsContainer.appendChild(tabButton);
+
+                // Create Tab Panel
+                const tabPanel = document.createElement('div');
+                tabPanel.id = `day${dayData.day}`;
+                tabPanel.className = `tab-content pt-4 ${index === 0 ? 'active' : ''}`;
+                
+                let contentHTML = '';
+
+                if (dayData.layout === 'cards') {
+                    contentHTML += `<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">`;
+                    dayData.content.forEach(item => {
+                        if (item.type === 'card') {
+                            contentHTML += `
+                                <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 shadow-sm hover:shadow-lg hover:border-indigo-200 transition-all duration-300">
+                                    <h4 class="font-bold text-lg text-indigo-700 mb-2">${item.title}</h4>
+                                    <p class="text-slate-600">${item.text}</p>
+                                </div>
+                            `;
+                        } else if (item.type === 'table') {
+                             contentHTML += `
+                                <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 shadow-sm hover:shadow-lg hover:border-indigo-200 transition-all duration-300 lg:col-span-2">
+                                    <h4 class="font-bold text-lg text-indigo-700 mb-4">${item.title}</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-left text-sm">
+                                            <thead>
+                                                <tr class="border-b">
+                                                    ${item.headers.map((header, i) => `<th class="p-2 font-semibold ${i > 0 ? 'bg-slate-100' : ''} ${i==1 ? 'rounded-tl-lg' : ''} ${i==item.headers.length-1 ? 'rounded-tr-lg' : ''}">${header}</th>`).join('')}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${item.rows.map(row => `
+                                                    <tr class="border-b last:border-b-0">
+                                                        ${row.map((cell, i) => `<td class="p-2 ${i > 0 ? 'bg-slate-100' : 'font-medium'}">${cell}</td>`).join('')}
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                    contentHTML += `</div>`;
+                }
+                
+                tabPanel.innerHTML = contentHTML;
+                tabPanelsContainer.appendChild(tabPanel);
+            });
+
+
+            // Tab switching logic
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    tabs.forEach(item => item.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const activeTab = this.getAttribute('data-tab');
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === activeTab) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Modal logic
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            const modalCloseButton = document.getElementById('modal-close-button');
+
+            function openModal(title, body) {
+                modalTitle.textContent = title;
+                modalBody.innerHTML = body;
+                modal.classList.remove('invisible', 'opacity-0');
+                modalContent.classList.remove('scale-95');
+            }
+
+            function closeModal() {
+                modal.classList.add('opacity-0');
+                modalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('invisible');
+                }, 300);
+            }
+
+            document.body.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal-trigger')) {
+                    const title = e.target.dataset.modalTitle;
+                    const body = e.target.dataset.modalBody;
+                    openModal(title, body);
+                }
+            });
+
+            modalCloseButton.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !modal.classList.contains('invisible')) {
+                    closeModal();
+                }
+            });
+            
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Progress Bar Logic
+            const progressBar = document.getElementById('progressBar');
+            function updateProgressBar() {
+                const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrolled = window.scrollY;
+                const progress = (scrolled / scrollableHeight) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
+            window.addEventListener('scroll', updateProgressBar);
+            updateProgressBar(); // Initial call
+        });
+    </script>
+</body>
+</html>
+
